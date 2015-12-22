@@ -1,4 +1,5 @@
-Bla
+This is a change to test emails that include diffs in it. 
 Bla2
-Bla3
 bla4
+bla5
+Removed bla1 and bla3, add bla5
