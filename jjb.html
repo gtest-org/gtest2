@@ -1,0 +1,411 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Jenkins Job Builder &mdash; OpenStack Project Infrastructure 0.0.1.dev9099 documentation</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/tweaks.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.0.1.dev9099',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="OpenStack Project Infrastructure 0.0.1.dev9099 documentation" href="index.html" />
+    <link rel="up" title="Major Systems" href="systems.html" />
+    <link rel="next" title="Logstash" href="logstash.html" />
+    <link rel="prev" title="Zuul" href="zuul.html" /> 
+  </head>
+  <body>
+  <div id="header">
+    <h1 id="logo"><a href="http://www.openstack.org/">OpenStack</a></h1>
+    <ul id="navigation">
+      
+<li><a href="index.html" title="Go to the Home page" class="link">Home</a></li>
+<li><a href="http://wiki.openstack.org/" title="Go to the OpenStack Wiki">Wiki</a></li>
+<li><a href="http://review.openstack.org/" title="Go to the OpenStack Gerrit server">Gerrit</a></li>
+<li><a href="http://jenkins.openstack.org/" title="Go to the OpenStack Jenkins server">Jenkins</a></li>
+<li><a href="http://logstash.openstack.org/" title="Go to the OpenStack Logstash server">Logstash</a></li>
+<li><a href="http://etherpad.openstack.org/" title="Go to the OpenStack Etherpad server">Etherpad</a></li>
+<li><a href="http://paste.openstack.org/" title="Go to the OpenStack Paste server">Paste</a></li>
+<li><a href="http://planet.openstack.org/" title="Go to the OpenStack Planet server">Planet</a></li>
+<li><a href="http://lists.openstack.org/" title="Go to the OpenStack Mailman server">Mailman</a></li>
+
+    </ul>
+  </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="jenkins-job-builder">
+<span id="jjb"></span><h1>Jenkins Job Builder<a class="headerlink" href="#jenkins-job-builder" title="Permalink to this headline">¶</a></h1>
+<p>Jenkins Job Builder is a system for configuring Jenkins jobs using
+simple YAML files stored in Git.</p>
+<div class="section" id="at-a-glance">
+<h2>At a Glance<a class="headerlink" href="#at-a-glance" title="Permalink to this headline">¶</a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Hosts:</th><td class="field-body"><ul class="first simple">
+<li><a class="reference external" href="http://jenkins.openstack.org">http://jenkins.openstack.org</a></li>
+<li><a class="reference external" href="http://jenkins-dev.openstack.org">http://jenkins-dev.openstack.org</a></li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Puppet:</th><td class="field-body"><ul class="first simple">
+<li><a class="reference external" href="https://git.openstack.org/cgit/openstack-infra/puppet-jenkins/tree/manifests/job_builder.pp">https://git.openstack.org/cgit/openstack-infra/puppet-jenkins/tree/manifests/job_builder.pp</a></li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Configuration:</th><td class="field-body"><ul class="first simple">
+<li><a class="reference external" href="https://git.openstack.org/cgit/openstack-infra/project-config/tree/jenkins/jobs/">project-config: jenkins/jobs/</a></li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Projects:</th><td class="field-body"><ul class="first simple">
+<li><a class="reference external" href="https://git.openstack.org/cgit/openstack-infra/jenkins-job-builder">https://git.openstack.org/cgit/openstack-infra/jenkins-job-builder</a></li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Bugs:</th><td class="field-body"><ul class="first simple">
+<li><a class="reference external" href="https://storyboard.openstack.org/#!/project/723">https://storyboard.openstack.org/#!/project/723</a></li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Resources:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference external" href="http://docs.openstack.org/infra/jenkins-job-builder">Reference Manual</a></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>In order to make the process of managing thousands of Jenkins jobs
+easier, Jenkins Job Builder was designed to take YAML based
+configurations and convert those into jobs that are injected into
+Jenkins.</p>
+<p>The documentation below describes how the OpenStack Infrastructure
+team uses the Jenkins Job Builder in our environment.</p>
+</div>
+<div class="section" id="configuring-projects">
+<h2>Configuring Projects<a class="headerlink" href="#configuring-projects" title="Permalink to this headline">¶</a></h2>
+<p>The YAML scripts to make this work are stored in the
+<a class="reference external" href="https://git.openstack.org/cgit/openstack-infra/project-config/tree/jenkins/jobs/">project-config: jenkins/jobs/</a> directory of the project-config repository.
+In this directory you can have four different types of yaml config
+files:</p>
+<ul class="simple">
+<li>Jenkins Jobs Defaults in <tt class="docutils literal"><span class="pre">defaults.yaml</span></tt>.</li>
+<li>Jenkins Jobs Macros to give larger config sections meaningful names in
+<tt class="docutils literal"><span class="pre">macros.yaml</span></tt>.</li>
+<li>Project specific configurations in <tt class="docutils literal"><span class="pre">project_name.yaml</span></tt>.</li>
+<li>Job template configurations. Need a <tt class="docutils literal"><span class="pre">projects.yaml</span></tt> file to
+specify how the templates should be filled out and templates go in
+<tt class="docutils literal"><span class="pre">template_name.yaml</span></tt>.</li>
+</ul>
+</div>
+<div class="section" id="yaml-format">
+<h2>YAML Format<a class="headerlink" href="#yaml-format" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="defaults">
+<h3>Defaults<a class="headerlink" href="#defaults" title="Permalink to this headline">¶</a></h3>
+<p>Example defaults config:</p>
+<div class="highlight-yaml"><div class="highlight"><pre><span class="p-Indicator">-</span> <span class="l-Scalar-Plain">defaults</span><span class="p-Indicator">:</span>
+    <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">global</span>
+    <span class="l-Scalar-Plain">project-type</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">freestyle</span>
+    <span class="l-Scalar-Plain">concurrent</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">true</span>
+
+    <span class="l-Scalar-Plain">wrappers</span><span class="p-Indicator">:</span>
+      <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">timeout</span><span class="p-Indicator">:</span>
+          <span class="l-Scalar-Plain">timeout</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">30</span>
+          <span class="l-Scalar-Plain">fail</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">true</span>
+      <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">timestamps</span>
+
+    <span class="l-Scalar-Plain">logrotate</span><span class="p-Indicator">:</span>
+      <span class="l-Scalar-Plain">daysToKeep</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">1</span>
+      <span class="l-Scalar-Plain">numToKeep</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">-1</span>
+      <span class="l-Scalar-Plain">artifactDaysToKeep</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">-1</span>
+      <span class="l-Scalar-Plain">artifactNumToKeep</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">-1</span>
+</pre></div>
+</div>
+<p>This config starts with the <tt class="docutils literal"><span class="pre">-</span> <span class="pre">defaults::</span></tt> line. This specifies that this
+section contains default values rather than job specifications. In this
+section we specify a useful set of defaults including a default description
+indicating Puppet manages these jobs, jobs are allowed to run concurrently,
+and a thirty minute job timeout.</p>
+</div>
+<div class="section" id="macros">
+<h3>Macros<a class="headerlink" href="#macros" title="Permalink to this headline">¶</a></h3>
+<p>Macros exist to give meaningful names to blocks of configuration that can be
+used in job configs in place of the blocks they name. For example:</p>
+<div class="highlight-yaml"><div class="highlight"><pre><span class="p-Indicator">-</span> <span class="l-Scalar-Plain">builder</span><span class="p-Indicator">:</span>
+    <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">git-prep</span>
+    <span class="l-Scalar-Plain">builders</span><span class="p-Indicator">:</span>
+      <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">shell</span><span class="p-Indicator">:</span> <span class="s">&quot;/slave_scripts/git-prep.sh&quot;</span>
+
+<span class="p-Indicator">-</span> <span class="l-Scalar-Plain">builder</span><span class="p-Indicator">:</span>
+    <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">docs</span>
+    <span class="l-Scalar-Plain">builders</span><span class="p-Indicator">:</span>
+      <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">shell</span><span class="p-Indicator">:</span> <span class="s">&quot;/slave_scripts/run-docs.sh&quot;</span>
+
+<span class="p-Indicator">-</span> <span class="l-Scalar-Plain">publisher</span><span class="p-Indicator">:</span>
+    <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">console-log</span>
+    <span class="l-Scalar-Plain">publishers</span><span class="p-Indicator">:</span>
+      <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">scp</span><span class="p-Indicator">:</span>
+          <span class="l-Scalar-Plain">site</span><span class="p-Indicator">:</span> <span class="s">&#39;scp-server&#39;</span>
+          <span class="l-Scalar-Plain">files</span><span class="p-Indicator">:</span>
+            <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">target</span><span class="p-Indicator">:</span> <span class="s">&#39;logs/$JOB_NAME/$BUILD_NUMBER&#39;</span>
+              <span class="l-Scalar-Plain">copy-console</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">true</span>
+              <span class="l-Scalar-Plain">copy-after-failure</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">true</span>
+</pre></div>
+</div>
+<p>In this block of code we define two builder macros and one publisher macro.
+Each macro has a name and using that name in a job config is equivalent to
+having the yaml below the name in place of the name in the job config. The next
+section shows how you can use these macros.</p>
+</div>
+<div class="section" id="job-config">
+<h3>Job Config<a class="headerlink" href="#job-config" title="Permalink to this headline">¶</a></h3>
+<p>Example job config:</p>
+<div class="highlight-yaml"><div class="highlight"><pre><span class="p-Indicator">-</span> <span class="l-Scalar-Plain">job</span><span class="p-Indicator">:</span>
+    <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">example-docs</span>
+    <span class="l-Scalar-Plain">node</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">node-label</span>
+
+    <span class="l-Scalar-Plain">triggers</span><span class="p-Indicator">:</span>
+      <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">zuul</span>
+
+    <span class="l-Scalar-Plain">builders</span><span class="p-Indicator">:</span>
+      <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">git-prep</span>
+      <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">docs</span>
+
+    <span class="l-Scalar-Plain">publishers</span><span class="p-Indicator">:</span>
+      <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">scp</span><span class="p-Indicator">:</span>
+          <span class="l-Scalar-Plain">site</span><span class="p-Indicator">:</span> <span class="s">&#39;scp-server&#39;</span>
+          <span class="l-Scalar-Plain">files</span><span class="p-Indicator">:</span>
+            <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">target</span><span class="p-Indicator">:</span> <span class="s">&#39;dir/ectory&#39;</span>
+              <span class="l-Scalar-Plain">source</span><span class="p-Indicator">:</span> <span class="s">&#39;build/html/foo&#39;</span>
+              <span class="l-Scalar-Plain">keep-hierarchy</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">true</span>
+      <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">console-log</span>
+</pre></div>
+</div>
+<p>Each job specification begins with <tt class="docutils literal"><span class="pre">-job:</span></tt>. Under this section you can
+specify the job details like name, node, etc. Any detail defined in the
+defaults section that is not defined under this job will be included as well.
+In addition to attribute details you can also specify how jenkins should
+perform this job. What trigger methods should be used, the build steps,
+jenkins publishing steps and so on. The macros defined earlier make this easy
+and simple.</p>
+</div>
+<div class="section" id="job-templates">
+<h3>Job Templates<a class="headerlink" href="#job-templates" title="Permalink to this headline">¶</a></h3>
+<p>Job templates allow you to specify a job config once with arguments that are
+replaced with the values specified in <tt class="docutils literal"><span class="pre">projects.yaml</span></tt>. This allows you to
+reuse job configs across many projects. First you need a templated job config:</p>
+<div class="highlight-yaml"><div class="highlight"><pre><span class="p-Indicator">-</span> <span class="l-Scalar-Plain">job-template</span><span class="p-Indicator">:</span>
+    <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="s">&#39;{name}-docs&#39;</span>
+
+    <span class="l-Scalar-Plain">triggers</span><span class="p-Indicator">:</span>
+      <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">zuul</span>
+
+    <span class="l-Scalar-Plain">builders</span><span class="p-Indicator">:</span>
+      <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">git-prep</span>
+      <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">docs</span>
+
+    <span class="l-Scalar-Plain">publishers</span><span class="p-Indicator">:</span>
+      <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">scp</span><span class="p-Indicator">:</span>
+          <span class="l-Scalar-Plain">site</span><span class="p-Indicator">:</span> <span class="s">&#39;scp-server&#39;</span>
+          <span class="l-Scalar-Plain">files</span><span class="p-Indicator">:</span>
+            <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">target</span><span class="p-Indicator">:</span> <span class="s">&#39;dir/ectory&#39;</span>
+              <span class="l-Scalar-Plain">source</span><span class="p-Indicator">:</span> <span class="s">&#39;build/html/foo&#39;</span>
+              <span class="l-Scalar-Plain">keep-hierarchy</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">true</span>
+      <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">console-log</span>
+
+    <span class="l-Scalar-Plain">node</span><span class="p-Indicator">:</span> <span class="s">&#39;{node}&#39;</span>
+
+
+<span class="p-Indicator">-</span> <span class="l-Scalar-Plain">job-group</span><span class="p-Indicator">:</span>
+    <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">python-jobs</span>
+    <span class="l-Scalar-Plain">jobs</span><span class="p-Indicator">:</span>
+      <span class="p-Indicator">-</span> <span class="s">&#39;{name}-docs&#39;</span>
+</pre></div>
+</div>
+<p>This takes the previous <tt class="docutils literal"><span class="pre">example-docs</span></tt> job and templatizes it. This will
+allow us to easily create <tt class="docutils literal"><span class="pre">example1-docs</span></tt> and <tt class="docutils literal"><span class="pre">example2-docs</span></tt> jobs.
+Each job template begins with <tt class="docutils literal"><span class="pre">-</span> <span class="pre">job-template:</span></tt> and the job specification is
+identical to the previous one, but we have introduced variable arguments. In
+this case <tt class="docutils literal"><span class="pre">{name}</span></tt> is a variable value that will be replaced. The values for
+name will be defined in the <tt class="docutils literal"><span class="pre">projects.yaml</span></tt> file.</p>
+<p>The <tt class="docutils literal"><span class="pre">-</span> <span class="pre">job-group:</span></tt> section is not strictly necessary but allows you to group
+many job templates with the same variable arguments under one name.</p>
+<p>The <tt class="docutils literal"><span class="pre">projects.yaml</span></tt> pulls all of the magic together. It specifies the
+arguments to and instantiates the job templates as real jobs. For example:</p>
+<div class="highlight-yaml"><div class="highlight"><pre><span class="p-Indicator">-</span> <span class="l-Scalar-Plain">project</span><span class="p-Indicator">:</span>
+    <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">example1</span>
+    <span class="l-Scalar-Plain">node</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">bare-trusty</span>
+
+    <span class="l-Scalar-Plain">jobs</span><span class="p-Indicator">:</span>
+      <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">python-jobs</span>
+
+<span class="p-Indicator">-</span> <span class="l-Scalar-Plain">project</span><span class="p-Indicator">:</span>
+    <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">example2</span>
+    <span class="l-Scalar-Plain">node</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">bare-centos6</span>
+
+    <span class="l-Scalar-Plain">jobs</span><span class="p-Indicator">:</span>
+      <span class="p-Indicator">-</span> <span class="p-Indicator">{</span><span class="nv">name</span><span class="p-Indicator">}</span><span class="l-Scalar-Plain">-docs</span>
+</pre></div>
+</div>
+<p>Each project using templated jobs should have its own <tt class="docutils literal"><span class="pre">-</span> <span class="pre">project:</span></tt> section.
+Under this sections there should be a <tt class="docutils literal"><span class="pre">jobs:</span></tt> section with a list of job
+templates or job groups to be used by this project. Other values under the
+<tt class="docutils literal"><span class="pre">-</span> <span class="pre">project:</span></tt> section define the arguments to the templates lised under
+<tt class="docutils literal"><span class="pre">jobs:</span></tt>. In this case we are giving the docs template <tt class="docutils literal"><span class="pre">name</span></tt> and <tt class="docutils literal"><span class="pre">node</span></tt>
+values.</p>
+<p>Notice that example1 makes use of the job group and example2 makes use of the
+job template.</p>
+</div>
+<div class="section" id="job-caching">
+<h3>Job Caching<a class="headerlink" href="#job-caching" title="Permalink to this headline">¶</a></h3>
+<p>The Jenkins Jobs builder maintains a special <a class="reference external" href="http://docs.openstack.org/infra/jenkins-job-builder/installation.html#running">cache</a> that
+contains an MD5 of every generated XML that it builds.  If
+it finds the XML is different then it will proceed to send this
+to Jenkins, otherwise it is skipped. If a job is accidentally deleted
+then this file should be modified or removed.</p>
+</div>
+<div class="section" id="sending-a-job-to-jenkins">
+<h3>Sending a Job to Jenkins<a class="headerlink" href="#sending-a-job-to-jenkins" title="Permalink to this headline">¶</a></h3>
+<p>The Jenkins Jobs builder talks to Jenkins using the Jenkins API.  This
+means that it can create and modify jobs directly without the need to
+restart or reload the Jenkins server.  It also means that Jenkins will
+verify the XML and cause the Jenkins Jobs builder to fail if there is
+a problem.</p>
+<p>For this to work a configuration file is needed.  There is an erb
+template for this configuration file at
+<a class="reference external" href="https://git.openstack.org/cgit/openstack-infra/system-config/tree/modules/jenkins/templates/jenkins_jobs.ini.erb">system-config: modules/jenkins/templates/jenkins_jobs.ini.erb</a>.  The contents
+of this template are:</p>
+<div class="highlight-ini"><div class="highlight"><pre><span class="k">[jenkins]</span>
+<span class="na">user</span><span class="o">=</span><span class="s">&lt;%= username %&gt;</span>
+<span class="na">password</span><span class="o">=</span><span class="s">&lt;%= password %&gt;</span>
+<span class="na">url</span><span class="o">=</span><span class="s">&lt;%= url %&gt;</span>
+</pre></div>
+</div>
+<p>The values for user and url are hardcoded in the Puppet repo in
+<a class="reference external" href="https://git.openstack.org/cgit/openstack-infra/system-config/tree/modules/openstack_project/manifests/jenkins.pp">system-config: modules/openstack_project/manifests/jenkins.pp</a>, but the
+password is stored in hiera. Make sure you have it defined as
+<tt class="docutils literal"><span class="pre">jenkins_jobs_password</span></tt> in the hiera DB.</p>
+<p>The password can be obtained by logging into the Jenkins user,
+clicking on your username in the top-right, clicking on <cite>Configure</cite>
+and then <cite>Show API Token</cite>.  This API Token is your password for the
+API.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+<div class="sphinxsidebar">
+    <div class="sphinxsidebarwrapper">
+            <h3><a href="index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference internal" href="#">Jenkins Job Builder</a><ul>
+<li><a class="reference internal" href="#at-a-glance">At a Glance</a></li>
+<li><a class="reference internal" href="#overview">Overview</a></li>
+<li><a class="reference internal" href="#configuring-projects">Configuring Projects</a></li>
+<li><a class="reference internal" href="#yaml-format">YAML Format</a><ul>
+<li><a class="reference internal" href="#defaults">Defaults</a></li>
+<li><a class="reference internal" href="#macros">Macros</a></li>
+<li><a class="reference internal" href="#job-config">Job Config</a></li>
+<li><a class="reference internal" href="#job-templates">Job Templates</a></li>
+<li><a class="reference internal" href="#job-caching">Job Caching</a></li>
+<li><a class="reference internal" href="#sending-a-job-to-jenkins">Sending a Job to Jenkins</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="zuul.html"
+                                  title="previous chapter">Zuul</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="logstash.html"
+                                  title="next chapter">Logstash</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/jjb.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+    </div>
+</div>
+
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="logstash.html" title="Logstash"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="zuul.html" title="Zuul"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">OpenStack Project Infrastructure 0.0.1.dev9099 documentation</a> &raquo;</li>
+          <li><a href="systems.html" accesskey="U">Major Systems</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2012-2014, OpenStack Infastructure Team - see the <a href="https://git.openstack.org/cgit/openstack-infra/system-config/">system-config git repo</a> for details.
+      Last updated on Fri Aug 7 12:17:16 2015, commit 5cd72b6.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+//Tracking docs.openstack.org/developer/<projectname> only
+//The URL is built from the project variable in conf.py
+var pageTracker = _gat._getTracker("UA-17511903-1");
+pageTracker._setCookiePath("/developer/OpenStack Project Infrastructure");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+
+  </body>
+</html>
