@@ -1,0 +1,10 @@
+- job:
+    name: gtest2-hello-world
+
+- project:
+    check:
+      jobs:
+        - tox-docs
+    gate:
+      jobs:
+        - tox-docs
