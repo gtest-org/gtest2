@@ -8,6 +8,8 @@ Contents:
 Indices and tables
 ==================
 
+Welcome to gtest2!
+
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
