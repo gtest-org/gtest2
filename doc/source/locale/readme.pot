@@ -1,0 +1,38 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2017, OpenStack Developers
+# This file is distributed under the same license as the gtest2 package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: gtest2 \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-04-22 04:38+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../../README.rst:3
+msgid "gtest2"
+msgstr ""
+
+#: ../../../README.rst:5
+msgid "Please fill here a long description which must be at least 3 lines wrapped on 80 cols, so that distribution package maintainers can use it in their packages. Note that this is a hard requirement."
+msgstr ""
+
+#: ../../../README.rst:9
+msgid "Free software: Apache license"
+msgstr ""
+
+#: ../../../README.rst:12
+msgid "Features"
+msgstr ""
+
+#: ../../../README.rst:14
+msgid "TODO"
+msgstr ""
+
