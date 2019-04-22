@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtest2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-22 04:38+0200\n"
+"POT-Creation-Date: 2019-04-22 19:21+0200\n"
 "PO-Revision-Date: 2019-04-22 17:18+0000\n"
 "Last-Translator: Frank Kloeker <f.kloeker@telekom.de>\n"
 "Language-Team: German <http://weblate.eumel.de/weblate/projects/gtest/gtest6/"
@@ -28,13 +28,17 @@ msgid "Indices and tables"
 msgstr ""
 
 #: ../index.rst:11
-msgid ":ref:`genindex`"
-msgstr ""
-
-#: ../index.rst:12
-msgid ":ref:`modindex`"
+msgid "Welcome to gtest2!"
 msgstr ""
 
 #: ../index.rst:13
+msgid ":ref:`genindex`"
+msgstr ""
+
+#: ../index.rst:14
+msgid ":ref:`modindex`"
+msgstr ""
+
+#: ../index.rst:15
 msgid ":ref:`search`"
 msgstr ""
